@@ -24,15 +24,12 @@ class _UserLoginState extends State<UserLogin> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 50,
-              ),
               const Icon(
                 Icons.lock,
                 size: 100,
               ),
               const SizedBox(
-                height: 50,
+                height: 40,
               ),
               Text(
                 "Welcome back you\'ve been missed",
@@ -48,7 +45,7 @@ class _UserLoginState extends State<UserLogin> {
                 obscureText: false,
               ),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
               MyTextField(
                 controller: password,
@@ -71,12 +68,13 @@ class _UserLoginState extends State<UserLogin> {
               ),
               const SizedBox(height: 10),
               MyButton(onTap: login),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Not a member"),
                   SizedBox(
-                    height: 4,
+                    width: 10,
                   ),
                   Text(
                     "Register Now",

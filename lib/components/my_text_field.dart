@@ -26,7 +26,7 @@ class _MyTextFieldState extends State<MyTextField> {
         obscureText: widget.obscureText,
         decoration: InputDecoration(
             enabledBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                const OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey.shade400)),
             fillColor: Colors.grey.shade200,
@@ -36,7 +36,6 @@ class _MyTextFieldState extends State<MyTextField> {
               color: Colors.grey[500]
             )
             ),
-    
       ),
     );
   }

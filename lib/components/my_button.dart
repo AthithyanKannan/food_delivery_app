@@ -17,7 +17,7 @@ class MyButton extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            '{$text}',
+            'Login',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

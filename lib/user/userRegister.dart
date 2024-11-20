@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/components/my_button.dart';
-import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:food_delivery_app/user/userHome.dart'; // Import your home page
+import 'package:food_delivery_app/components/my_button.dart';
+import 'package:food_delivery_app/user/userHome.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -17,9 +18,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // Register User Function
   Future<void> registerUser() async {
-    const String url = "http://10.10.69.244:4000/api/user/register"; // Change to your backend API URL
+    const String url = "http://10.10.69.244:4000/api/user/register";
 
     final Map<String, String> data = {
       'name': _nameController.text,
@@ -27,26 +27,22 @@ class _RegisterPageState extends State<RegisterPage> {
       'password': _passwordController.text,
     };
 
-    final headers = {
-      'Content-Type': 'application/json',
-    };
+    final headers = {'Content-Type': 'application/json'};
 
     try {
       final response = await http.post(
         Uri.parse(url),
         headers: headers,
-        body: json.encode(data), // Send data as JSON
+        body: json.encode(data),
       );
-
-      print(response.body);
-      print(response.statusCode);
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
         if (responseData['success']) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('token', responseData['token']);
+
           Fluttertoast.showToast(msg: "Registration successful!");
-          
-          // Navigate to the home page or another screen after successful registration
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => UserHome()),
@@ -59,16 +55,13 @@ class _RegisterPageState extends State<RegisterPage> {
       }
     } catch (e) {
       Fluttertoast.showToast(msg: "Error: $e");
-      print("Error: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Register"),
-      ),
+      appBar: AppBar(title: const Text("Register")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -81,7 +74,6 @@ class _RegisterPageState extends State<RegisterPage> {
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
             ),
             TextField(
               controller: _passwordController,
@@ -89,18 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
               obscureText: true,
             ),
             const SizedBox(height: 20),
-            MyButton(
-              onTap: () {
-                if (_nameController.text.isEmpty ||
-                    _emailController.text.isEmpty ||
-                    _passwordController.text.isEmpty) {
-                  Fluttertoast.showToast(msg: "Please fill in all fields.");
-                } else {
-                  registerUser();
-                }
-              },
-              text: 'Register',
-            ),
+            MyButton(onTap: registerUser, text: "Register"),
           ],
         ),
       ),

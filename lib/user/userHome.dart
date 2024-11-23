@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class UserHome extends StatefulWidget {
-  const UserHome({Key? key}) : super(key: key);
+  const UserHome({super.key});
 
   @override
   _UserHomeState createState() => _UserHomeState();
@@ -28,7 +28,7 @@ class _UserHomeState extends State<UserHome> {
       final token = prefs.getString('token');
 
       final response = await http.get(
-        Uri.parse("http://10.10.69.244:4000/api/food/list"),
+        Uri.parse("http://10.10.66.71:4000/api/food/list"),
         headers: {'token': token ?? ''},
       );
 
@@ -66,10 +66,10 @@ class _UserHomeState extends State<UserHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Food Cart"),
+        title: const Text("Food Cart"),
         actions: [
           IconButton(
-            icon: Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.shopping_cart),
             onPressed: () {
               Navigator.push(
                 context,
@@ -82,15 +82,15 @@ class _UserHomeState extends State<UserHome> {
         ],
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : foodItems.isEmpty
-              ? Center(child: Text("No food items found."))
+              ? const Center(child: Text("No food items found."))
               : ListView.builder(
                   itemCount: foodItems.length,
                   itemBuilder: (context, index) {
                     final food = foodItems[index];
                     return Card(
-                      margin: EdgeInsets.all(8.0),
+                      margin: const EdgeInsets.all(8.0),
                       child: ListTile(
                         title: Text(food['name'] ?? "Unnamed Food"),
                         subtitle: Text(
@@ -100,7 +100,7 @@ class _UserHomeState extends State<UserHome> {
                           children: [
                             Text("\$${food['price']}"),
                             IconButton(
-                              icon: Icon(Icons.add_shopping_cart),
+                              icon: const Icon(Icons.add_shopping_cart),
                               onPressed: () => addToCart(food),
                             ),
                           ],

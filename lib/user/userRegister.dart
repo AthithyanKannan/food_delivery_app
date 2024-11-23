@@ -19,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> registerUser() async {
-    const String url = "http://10.10.69.244:4000/api/user/register";
+    const String url = "http://10.10.66.71:4000/api/user/register";
 
     final Map<String, String> data = {
       'name': _nameController.text,
@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Fluttertoast.showToast(msg: "Registration successful!");
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => UserHome()),
+            MaterialPageRoute(builder: (context) => const UserHome()),
           );
         } else {
           Fluttertoast.showToast(msg: responseData['message']);

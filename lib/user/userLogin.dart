@@ -7,6 +7,7 @@ import 'package:food_delivery_app/components/my_text_field.dart';
 import 'package:food_delivery_app/components/my_button.dart';
 import 'package:food_delivery_app/user/userRegister.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class UserLogin extends StatefulWidget {
   const UserLogin({super.key});
@@ -19,44 +20,69 @@ class _UserLoginState extends State<UserLogin> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  Future<void> login() async {
-    const String url = "http://10.10.69.244:4000/api/user/login";
+Future<void> login() async {
+  const String url = "http://10.10.66.71:4000/api/user/login";
 
-    final Map<String, String> data = {
-      'email': email.text,
-      'password': password.text,
-    };
+  final Map<String, String> data = {
+    'email': email.text,
+    'password': password.text,
+  };
 
-    final headers = {'Content-Type': 'application/json'};
+  final headers = {'Content-Type': 'application/json'};
 
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: headers,
-        body: json.encode(data),
-      );
+  try {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: json.encode(data),
+    );
 
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        if (responseData['success']) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('token', responseData['token']);
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
 
-          Fluttertoast.showToast(msg: "Login successful!");
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => UserHome()),
-          );
+      if (responseData['success']) {
+        final String? token = responseData['token'];
+
+        if (token != null) {
+          // Decode the JWT to extract the userId
+          final parts = token.split('.');
+          if (parts.length == 3) {
+            final payload = utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+            final payloadMap = jsonDecode(payload);
+            final String? userId = payloadMap['id'];
+
+            if (userId != null) {
+              // Save token and userId in SharedPreferences
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setString('token', token);
+              await prefs.setString('userId', userId);
+
+              Fluttertoast.showToast(msg: "Login successful!");
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const UserHome()),
+              );
+            } else {
+              Fluttertoast.showToast(msg: "User ID not found in token.");
+            }
+          } else {
+            Fluttertoast.showToast(msg: "Invalid token structure.");
+          }
         } else {
-          Fluttertoast.showToast(msg: "Incorrect Email or Password");
+          Fluttertoast.showToast(msg: "Token not provided in response.");
         }
       } else {
-        Fluttertoast.showToast(msg: "Error during login.");
+        Fluttertoast.showToast(msg: "Incorrect Email or Password");
       }
-    } catch (e) {
-      Fluttertoast.showToast(msg: "Error: $e");
+    } else {
+      Fluttertoast.showToast(msg: "Error during login. Server responded with status code: ${response.statusCode}");
     }
+  } catch (e) {
+    Fluttertoast.showToast(msg: "Error: $e");
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +125,8 @@ class _UserLoginState extends State<UserLogin> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegisterPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const RegisterPage()),
                       );
                     },
                     child: const Text(

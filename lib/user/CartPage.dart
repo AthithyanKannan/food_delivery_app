@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class CartPage extends StatefulWidget {
   final List<dynamic> cartItems;
 
-  const CartPage({super.key, required this.cartItems});
+  const CartPage({Key? key, required this.cartItems}) : super(key: key);
 
   @override
   _CartPageState createState() => _CartPageState();
@@ -29,8 +29,6 @@ class _CartPageState extends State<CartPage> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString('userId');
     final String? token = prefs.getString('token');
-    print("userId");
-    print(userId);
 
     if (userId == null || token == null) {
       Fluttertoast.showToast(msg: "User not logged in.");
@@ -40,7 +38,6 @@ class _CartPageState extends State<CartPage> {
     try {
       // Construct order data
       final orderData = {
-        "userId": userId,
         "items": widget.cartItems.map((item) {
           return {
             "name": item['name'],
@@ -59,31 +56,23 @@ class _CartPageState extends State<CartPage> {
         }
       };
 
-      // Call the backend to place the order
+      // Call the backend to place an order with token in headers
       final response = await http.post(
-        Uri.parse("http://10.10.66.71:4000/api/order/place"),
+        Uri.parse("http://10.10.66.71:4000/api/order/place"), // Replace with your server IP
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
+          "token": "$token", // Pass the token in the headers
         },
         body: jsonEncode(orderData),
       );
 
+      print(response.statusCode);
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print(data);
         if (data['success']) {
-          // Order placed successfully
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Order placed successfully!"),
-              backgroundColor: Colors.green,
-            ),
-          );
-
-          // Clear cart
-          setState(() {
-            widget.cartItems.clear();
-          });
+          Fluttertoast.showToast(msg: "Order placed successfully.");
         } else {
           Fluttertoast.showToast(msg: "Failed to place order.");
         }
@@ -97,7 +86,6 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     double totalPrice = getTotalPrice();
 
     return Scaffold(
@@ -113,10 +101,22 @@ class _CartPageState extends State<CartPage> {
                     itemCount: widget.cartItems.length,
                     itemBuilder: (context, index) {
                       final item = widget.cartItems[index];
-                      return ListTile(
-                        title: Text(item['name']),
-                        subtitle: Text("Price: \$${item['price']}"),
-                        trailing: Text("Qty: ${item['quantity']}"),
+                      return Card(
+                        margin: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: Text(item['name']),
+                          subtitle: Text("Price: \$${item['price']}"),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.remove_shopping_cart),
+                            onPressed: () {
+                              setState(() {
+                                widget.cartItems.removeAt(index);
+                              });
+                              Fluttertoast.showToast(
+                                  msg: "Item removed from cart.");
+                            },
+                          ),
+                        ),
                       );
                     },
                   ),

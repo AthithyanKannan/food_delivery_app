@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/components/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyTextField extends StatefulWidget {
   final controller;
@@ -20,20 +22,18 @@ class _MyTextFieldState extends State<MyTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      padding: const EdgeInsets.symmetric(horizontal: 7.0),
       child: TextField(
         controller: widget.controller,
         obscureText: widget.obscureText,
         decoration: InputDecoration(
-            enabledBorder:
-                const OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey.shade400)),
-            fillColor: Colors.grey.shade200,
+            fillColor: Color.fromRGBO(245, 149, 132, 0.984),
             filled: true,
             hintText: widget.hintText,
-            hintStyle: TextStyle(
-              color: Colors.grey[500]
+            hintStyle: GoogleFonts.outfit(
+              color: Colors.white
             )
             ),
       ),

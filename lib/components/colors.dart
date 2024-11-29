@@ -1,3 +1,3 @@
 import 'package:flutter/material.dart';
 
-final tomoto = Color.fromRGBO(255, 99, 71, 1);
+const tomoto = Color.fromRGBO(228, 100, 23, 1);

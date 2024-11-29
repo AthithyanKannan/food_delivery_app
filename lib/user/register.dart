@@ -3,7 +3,7 @@ import 'package:food_delivery_app/components/my_text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Register extends StatefulWidget {
-  const Register({ Key? key }) : super(key: key);
+  const Register({ super.key });
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -88,17 +88,17 @@ class _RegisterState extends State<Register> {
                   const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: () {},
-                    child: Text(
+                    style: ButtonStyle(
+                        padding: WidgetStateProperty.all<EdgeInsets>(
+                            const EdgeInsets.symmetric(horizontal: 50)),
+                        backgroundColor:
+                            WidgetStateProperty.all(const Color(0xF9F59584)),
+                        shape: WidgetStateProperty.all(BeveledRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)))),
+                    child: const Text(
                       "Create Account",
                       style: TextStyle(color: Colors.white),
                     ),
-                    style: ButtonStyle(
-                        padding: WidgetStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(horizontal: 50)),
-                        backgroundColor:
-                            WidgetStateProperty.all(Color(0xF9F59584)),
-                        shape: WidgetStateProperty.all(BeveledRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)))),
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/components/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyTextField extends StatefulWidget {
@@ -27,12 +28,13 @@ class _MyTextFieldState extends State<MyTextField> {
         obscureText: widget.obscureText,
         decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade400)),
-            fillColor: const Color.fromRGBO(245, 149, 132, 0.984),
+                borderSide: BorderSide(color: tomoto)),
+            fillColor: Colors.white,
             filled: true,
             hintText: widget.hintText,
+            
             hintStyle: GoogleFonts.outfit(
-              color: Colors.white
+              color: Colors.black
             )
             ),
       ),

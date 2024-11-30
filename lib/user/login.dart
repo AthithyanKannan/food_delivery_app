@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/components/colors.dart';
 import 'package:food_delivery_app/components/my_text_field.dart';
 import 'package:food_delivery_app/user/home.dart';
 import 'package:food_delivery_app/user/register.dart';
@@ -16,11 +17,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController _email = TextEditingController();
-  TextEditingController _pass = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _pass = TextEditingController();
 
   Future<void> login() async {
-    const String url = "http://10.10.68.154:4000/api/user/login";
+    const String url = "http://10.10.71.160:4000/api/user/login";
 
     final Map<String, String> data = {
       'email': _email.text,
@@ -43,7 +44,6 @@ class _LoginState extends State<Login> {
           final String? token = responseData['token'];
 
           if (token != null) {
-            // Decode the JWT to extract the userId
             final parts = token.split('.');
             if (parts.length == 3) {
               final payload =
@@ -52,70 +52,83 @@ class _LoginState extends State<Login> {
               final String? userId = payloadMap['id'];
 
               if (userId != null) {
-                // Save token and userId in SharedPreferences
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 await prefs.setString('token', token);
                 await prefs.setString('userId', userId);
 
-                toastification.show(
-                  context: context,
-                  title: Text("Success"),
-                  description: Text("Login successful"),
-                  backgroundColor: Colors.green,
-                );
+                if (mounted) {
+                  toastification.show(
+                    context: context,
+                    title: const Text("Success"),
+                    description: const Text("Login successful"),
+                    backgroundColor: Colors.green,
+                  );
 
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Home()),
-                );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Home()),
+                  );
+                }
               } else {
+                if (mounted) {
+                  toastification.show(
+                    context: context,
+                    title: const Text("Error"),
+                    description: const Text("User ID not found in token."),
+                    backgroundColor: Colors.red,
+                  );
+                }
+              }
+            } else {
+              if (mounted) {
                 toastification.show(
                   context: context,
-                  title: Text("Error"),
-                  description: Text("User ID not found in token."),
+                  title: const Text("Error"),
+                  description: const Text("Invalid token structure."),
                   backgroundColor: Colors.red,
                 );
               }
-            } else {
+            }
+          } else {
+            if (mounted) {
               toastification.show(
                 context: context,
-                title: Text("Error"),
-                description: Text("Invalid token structure."),
+                title: const Text("Error"),
+                description: const Text("Token not provided in response."),
                 backgroundColor: Colors.red,
               );
             }
-          } else {
+          }
+        } else {
+          if (mounted) {
             toastification.show(
               context: context,
-              title: Text("Error"),
-              description: Text("Token not provided in response."),
+              title: const Text("Error"),
+              description: const Text("Incorrect Email or Password"),
               backgroundColor: Colors.red,
             );
           }
-        } else {
+        }
+      } else {
+        if (mounted) {
           toastification.show(
             context: context,
-            title: Text("Error"),
-            description: Text("Incorrect Email or Password"),
+            title: const Text("Error"),
+            description: Text(
+                "Error during login. Server responded with status code: ${response.statusCode}"),
             backgroundColor: Colors.red,
           );
         }
-      } else {
+      }
+    } catch (e) {
+      if (mounted) {
         toastification.show(
           context: context,
-          title: Text("Error"),
-          description:
-              Text("Error during login. Server responded with status code: ${response.statusCode}"),
+          title: const Text("Error"),
+          description: Text("Error: $e"),
           backgroundColor: Colors.red,
         );
       }
-    } catch (e) {
-      toastification.show(
-        context: context,
-          title: Text("Error"),
-        description: Text("Error: $e"),
-        backgroundColor: Colors.red,
-      );
     }
   }
 
@@ -123,6 +136,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
             Center(
@@ -163,7 +177,7 @@ class _LoginState extends State<Login> {
                                 style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.blueAccent),
+                                    color: tomoto),
                               ),
                             ],
                           ),
@@ -182,22 +196,18 @@ class _LoginState extends State<Login> {
                         obscureText: true),
                     const SizedBox(height: 40),
                     ElevatedButton(
-                      onPressed: login,
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(horizontal: 50),
-                        ),
-                        backgroundColor: MaterialStateProperty.all(
-                            const Color(0xF9F59584)),
-                        shape: MaterialStateProperty.all(BeveledRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
+                        onPressed: login,
+                        style: ButtonStyle(
+                            padding: WidgetStateProperty.all(
+                                EdgeInsets.symmetric(horizontal: 50)),
+                            backgroundColor: WidgetStateProperty.all(tomoto),
+                            shape: WidgetStateProperty.all(
+                                BeveledRectangleBorder(
+                                    borderRadius: BorderRadius.circular(3)))),
+                        child: Text(
+                          "Login",
+                          style: TextStyle(color: Colors.white),
                         )),
-                      ),
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -213,7 +223,7 @@ class _LoginState extends State<Login> {
                           },
                           child: const Text(
                             "Register Now",
-                            style: TextStyle(color: Colors.blueAccent),
+                            style: TextStyle(color: tomoto),
                           ),
                         ),
                       ],

@@ -20,7 +20,7 @@ class _RegisterState extends State<Register> {
   TextEditingController _name = TextEditingController();
 
   Future<void> registerUser() async {
-    const String url = "http://10.10.68.154:4000/api/user/register";
+    const String url = "http://10.10.71.160:4000/api/user/register";
 
     final Map<String, String> data = {
       'name': _name.text,

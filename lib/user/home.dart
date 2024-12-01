@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
       final token = prefs.getString('token');
 
       final response = await http.get(
-        Uri.parse("http://10.10.71.160:4000/api/food/list"),
+        Uri.parse("http://10.10.64.116:4000/api/food/list"),
         headers: {'token': token ?? ''},
       );
 
@@ -66,6 +66,7 @@ class _HomeState extends State<Home> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        duration: Duration(milliseconds: 100),
         content: Text("${food['name']} added to cart!"),
         backgroundColor: tomoto,
       ),

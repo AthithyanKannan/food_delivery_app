@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _pass = TextEditingController();
 
   Future<void> login() async {
-    const String url = "http://10.10.71.160:4000/api/user/login";
+    const String url = "http://10.10.64.116:4000/api/user/login";
 
     final Map<String, String> data = {
       'email': _email.text,

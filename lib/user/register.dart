@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/components/colors.dart';
 import 'package:food_delivery_app/components/my_text_field.dart';
 import 'package:food_delivery_app/user/home.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,70 +20,75 @@ class _RegisterState extends State<Register> {
   TextEditingController _pass = TextEditingController();
   TextEditingController _name = TextEditingController();
 
-  Future<void> registerUser() async {
-    const String url = "http://10.10.71.160:4000/api/user/register";
+ Future<void> registerUser() async {
+  const String url = "http://10.10.64.116:4000/api/user/register";
 
-    final Map<String, String> data = {
-      'name': _name.text,
-      'email': _email.text,
-      'password': _pass.text,
-    };
+  final Map<String, String> data = {
+    'name': _name.text,
+    'email': _email.text,
+    'password': _pass.text,
+  };
 
-    final headers = {'Content-Type': 'application/json'};
+  final headers = {'Content-Type': 'application/json'};
 
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: headers,
-        body: json.encode(data),
-      );
+  try {
+    final response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: json.encode(data),
+    );
 
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        if (responseData['success']) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('token', responseData['token']);
+    if (!mounted) return; // Check if the widget is still mounted before proceeding
 
-          toastification.show(
-            context: context,
-            title: Text("Success"),
-            description: Text("Registration successful!"),
-            backgroundColor: Colors.green,
-          );
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      if (responseData['success']) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', responseData['token']);
 
-          Navigator.pushReplacement(
-             context,
-            MaterialPageRoute(builder: (context) => const Home()),
-          );
-        } else {
-          toastification.show(
-            context: context,
-            title: const Text("Error"),
-            description: responseData['message'],
-            backgroundColor: Colors.red,
-          );
-        }
+        toastification.show(
+          context: context,
+          title: Text("Success"),
+          description: Text("Registration successful!"),
+          backgroundColor: Colors.green,
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
       } else {
         toastification.show(
           context: context,
           title: const Text("Error"),
-          description: const Text("Error during registrations"),
+          description: responseData['message'],
           backgroundColor: Colors.red,
         );
       }
-    } catch (e) {
+    } else {
       toastification.show(
         context: context,
         title: const Text("Error"),
-        description: Text("Error : $e"),
+        description: const Text("Error during registration"),
         backgroundColor: Colors.red,
       );
     }
+  } catch (e) {
+    if (!mounted) return;
+    toastification.show(
+      context: context,
+      title: const Text("Error"),
+      description: Text("Error : $e"),
+      backgroundColor: Colors.red,
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Center(
@@ -123,7 +129,7 @@ class _RegisterState extends State<Register> {
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.blueAccent),
+                                  color: tomoto),
                             ),
                           ],
                         ),
@@ -142,20 +148,20 @@ class _RegisterState extends State<Register> {
                       hintText: "Password",
                       obscureText: true),
                   const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: registerUser,
-                    style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(horizontal: 50)),
-                        backgroundColor:
-                            MaterialStateProperty.all(const Color(0xF9F59584)),
-                        shape: MaterialStateProperty.all(BeveledRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)))),
-                    child: const Text(
-                      "Create Account",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                        ElevatedButton(
+                        onPressed: registerUser,
+                        style: ButtonStyle(
+                            padding: WidgetStateProperty.all(
+                                EdgeInsets.symmetric(horizontal: 50)),
+                            backgroundColor: WidgetStateProperty.all(tomoto),
+                            shape: WidgetStateProperty.all(
+                                BeveledRectangleBorder(
+                                    borderRadius: BorderRadius.circular(3)))),
+                        child: Text(
+                          "Create Account",
+                          style: TextStyle(color: Colors.white),
+                        )),
+    
                 ],
               ),
             ),

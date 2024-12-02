@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/admin/adminHome.dart';
 import 'package:food_delivery_app/user/login.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: const Login(),
+      home: const AdminHome(),
     );
   }
 }

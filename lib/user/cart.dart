@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/components/colors.dart';
 import 'package:toastification/toastification.dart';
@@ -152,7 +151,7 @@ class _CartState extends State<Cart> {
                                   padding: const EdgeInsets.all(12.0),
                                   child: Text(
                                     "${item['name']} x $quantity",
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold
                                     ),
                                     ),
@@ -176,7 +175,7 @@ class _CartState extends State<Cart> {
                               ],
                             );
                           },
-                        ).toList(),
+                        ),
                       ],
                     ),
                   ),

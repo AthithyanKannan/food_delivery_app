@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _pass = TextEditingController();
 
   Future<void> login() async {
-    const String url = "http://10.10.64.116:4000/api/user/login";
+    const String url = "http://10.10.64.116:4000/user/login";
 
     final Map<String, String> data = {
       'email': _email.text,
@@ -199,12 +199,12 @@ class _LoginState extends State<Login> {
                         onPressed: login,
                         style: ButtonStyle(
                             padding: WidgetStateProperty.all(
-                                EdgeInsets.symmetric(horizontal: 50)),
+                                const EdgeInsets.symmetric(horizontal: 50)),
                             backgroundColor: WidgetStateProperty.all(tomoto),
                             shape: WidgetStateProperty.all(
                                 BeveledRectangleBorder(
                                     borderRadius: BorderRadius.circular(3)))),
-                        child: Text(
+                        child: const Text(
                           "Login",
                           style: TextStyle(color: Colors.white),
                         )),

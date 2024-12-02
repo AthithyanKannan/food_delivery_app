@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: Duration(milliseconds: 100),
+        duration: const Duration(milliseconds: 100),
         content: Text("${food['name']} added to cart!"),
         backgroundColor: tomoto,
       ),
@@ -128,7 +128,7 @@ class _HomeState extends State<Home> {
                       )
                     ],
                   ),
-                  ...foodItems.map((food) => _buildFoodCard(food)).toList(),
+                  ...foodItems.map((food) => _buildFoodCard(food)),
                 ],
               ),
             ),

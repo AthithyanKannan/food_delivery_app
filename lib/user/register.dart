@@ -16,9 +16,9 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  TextEditingController _email = TextEditingController();
-  TextEditingController _pass = TextEditingController();
-  TextEditingController _name = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _pass = TextEditingController();
+  final TextEditingController _name = TextEditingController();
 
  Future<void> registerUser() async {
   const String url = "http://10.10.64.116:4000/api/user/register";
@@ -48,8 +48,8 @@ class _RegisterState extends State<Register> {
 
         toastification.show(
           context: context,
-          title: Text("Success"),
-          description: Text("Registration successful!"),
+          title: const Text("Success"),
+          description: const Text("Registration successful!"),
           backgroundColor: Colors.green,
         );
 
@@ -152,12 +152,12 @@ class _RegisterState extends State<Register> {
                         onPressed: registerUser,
                         style: ButtonStyle(
                             padding: WidgetStateProperty.all(
-                                EdgeInsets.symmetric(horizontal: 50)),
+                                const EdgeInsets.symmetric(horizontal: 50)),
                             backgroundColor: WidgetStateProperty.all(tomoto),
                             shape: WidgetStateProperty.all(
                                 BeveledRectangleBorder(
                                     borderRadius: BorderRadius.circular(3)))),
-                        child: Text(
+                        child: const Text(
                           "Create Account",
                           style: TextStyle(color: Colors.white),
                         )),

@@ -15,7 +15,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<dynamic> foodItems = [];
-  List<dynamic> cartItems = []; // Cart list
+  List<dynamic> cartItems = [];
   bool isLoading = true;
 
   @override

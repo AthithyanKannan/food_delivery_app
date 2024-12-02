@@ -12,14 +12,12 @@ class AdminHome extends StatefulWidget {
 }
 
 class _AdminHomeState extends State<AdminHome> {
-  // Define the current selected index
   int _currentIndex = 0;
 
-  // List of pages for navigation
   final List<Widget> _pages = [
     const Add(),
-    const ListPage(), // Replace with your List page
-    const Orders(), // Replace with your Orders page
+    const ListPage(),
+    const Orders(),
   ];
 
   @override
@@ -36,16 +34,16 @@ class _AdminHomeState extends State<AdminHome> {
         shadowColor: tomoto,
         title: const Text(
           "HungryJi-Admin Panel",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 18),
         ),
         backgroundColor: tomoto,
       ),
-      body: _pages[_currentIndex], // Display the current page
+      body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex, // Set the current selected index
+        currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
-            _currentIndex = index; // Update the selected index
+            _currentIndex = index;
           });
         },
         items: const [

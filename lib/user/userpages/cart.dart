@@ -27,7 +27,7 @@ class _CartState extends State<Cart> {
 
       for (var updatedItem in updatedItems) {
         if (updatedItem['name'] == item['name']) {
-          updatedItem['quantity'] = (updatedItem['quantity'] ?? 1) + quantity; // Increase quantity
+          updatedItem['quantity'] = (updatedItem['quantity'] ?? 1) + quantity;
           itemExists = true;
           break;
         }

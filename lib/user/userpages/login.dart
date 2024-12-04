@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery_app/components/colors.dart';
 import 'package:food_delivery_app/components/my_text_field.dart';
 import 'package:food_delivery_app/user/home.dart';
-import 'package:food_delivery_app/user/register.dart';
+import 'package:food_delivery_app/user/userpages/profile.dart';
+import 'package:food_delivery_app/user/userpages/register.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +22,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _pass = TextEditingController();
 
   Future<void> login() async {
-    const String url = "http://10.10.64.116:4000/user/login";
+    const String url = "http://10.10.64.79:4000/api/user/login";
 
     final Map<String, String> data = {
       'email': _email.text,

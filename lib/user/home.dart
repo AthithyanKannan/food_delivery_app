@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:food_delivery_app/components/colors.dart';
-import 'package:food_delivery_app/user/cart.dart';
+// import 'package:food_delivery_app/user/cart.dart';
+import 'package:food_delivery_app/user/userpages/cart.dart';
+import 'package:food_delivery_app/user/userpages/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -17,6 +19,7 @@ class _HomeState extends State<Home> {
   List<dynamic> foodItems = [];
   List<dynamic> cartItems = [];
   bool isLoading = true;
+  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -30,7 +33,7 @@ class _HomeState extends State<Home> {
       final token = prefs.getString('token');
 
       final response = await http.get(
-        Uri.parse("http://10.10.64.116:4000/api/food/list"),
+        Uri.parse("http://10.10.64.79:4000/api/food/list"),
         headers: {'token': token ?? ''},
       );
 
@@ -106,41 +109,57 @@ class _HomeState extends State<Home> {
         ],
         backgroundColor: tomoto,
       ),
-      body: isLoading
-          ? _buildShimmerEffect()
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  Center(
-                    child: _buildHeader(),
-                  ),
-                  const SizedBox(height: 10),
-                  const Row(
-                    children: [
-                      SizedBox(width: 30),
-                      Text(
-                        "Top dishes near you",
-                        style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
-                  ),
-                  ...foodItems.map((food) => _buildFoodCard(food)),
-                ],
-              ),
-            ),
+      body: _currentIndex == 0 ? _buildHomeContent() : const Profile(),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
         selectedItemColor: tomoto,
+        backgroundColor: Colors.white,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
       ),
     );
+  }
+
+  Widget _buildHomeContent() {
+    return isLoading
+        ? _buildShimmerEffect()
+        : SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                Center(
+                  child: _buildHeader(),
+                ),
+                const SizedBox(height: 10),
+                const Row(
+                  children: [
+                    SizedBox(width: 30),
+                    Text(
+                      "Top dishes near you",
+                      style: TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+                ...foodItems.map((food) => _buildFoodCard(food)),
+              ],
+            ),
+          );
   }
 
   Widget _buildHeader() {
